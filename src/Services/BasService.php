@@ -30,6 +30,102 @@ class BasService
         return $this->config['base_url'];
     }
 
+
+
+
+
+    public function getAccessToken(string $authCode)
+    {
+        $endpoint = '/api/v1/auth/token';
+        $payload = [
+            'client_id' => $this->config['client_id'] . '.APP',
+            'client_secret' => $this->config['client_secret'],
+            'grant_type' => 'authorization_code',
+            'code' => $authCode,
+            'redirect_uri' => $this->getBaseUrl() . '/api/v1/auth/callback', // Adjust callback URL if needed
+        ];
+
+        return $this->post($endpoint, $payload);
+    }
+
+    public function getUserInfo(string $accessToken)
+    {
+        $endpoint = '/api/v1/auth/userinfo';
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+        ];
+        return $this->get($endpoint, $headers);
+    }
+
+    public function generateFetchAuthCodeJS(string $clientId = null): string
+    {
+        $clientId = $clientId ?: $this->config['client_id'];
+        return <<<JS
+            function basFetchAuthCode(){JSBridge.call('basFetchAuthCode', {
+                    clientId: "$clientId"
+                }).then(function(result) {
+                console.log('basFetchAuthCode result:', result);
+                    // Handle the result in your JavaScript code
+                });
+            }
+                window.addEventListener('JSBridgeReady', function(event) {
+                    console.log('JSBridgeReady fired');
+                    basFetchAuthCode();
+                });
+            JS;
+    }
+
+
+
+
+
+
+
+
+
+    public function initiateTransactionOrder(array $payload)
+    {
+        $endpoint = '/api/v1/merchant/secure/transaction/initiate';
+        return $this->post($endpoint, $payload);
+    }
+
+    public function checkTransactionStatus(array $payload)
+    {
+        $endpoint = '/api/v1/merchant/secure/transaction/status';
+        return $this->post($endpoint, $payload);
+    }
+
+    public function refundPayment(array $payload)
+    {
+        $endpoint = '/api/v1/merchant/refund-payment/request';
+        return $this->post($endpoint, $payload);
+    }
+
+    public function generateBasPaymentJS(array $payload): string
+    {
+        $payloadJson = json_encode($payload);
+        return <<<JS
+        function basPayment(){JSBridge.call('basPayment', $payloadJson).then(function(result) {
+                console.log('basPayment result:', result);
+                // يمكنك إضافة المزيد من كود JavaScript هنا على أسطر جديدة
+                // واستخدام المسافات البادئة لتنظيم الكود JavaScript
+                if (result && result.status === 1) {
+                    // ... إجراءات النجاح ...
+                } else {
+                    // ... إجراءات الفشل ...
+                }
+            });
+                }
+        JS; // علامة الإغلاق JS; تبدأ من بداية السطر بدون مسافات بادئة
+    }
+
+
+
+
+
+
+
+
     public function post(string $endpoint, array $data = [], array $headers = [])
     {
         $signature = $this->generateSignature($data);

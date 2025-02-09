@@ -7,7 +7,7 @@ This SDK simplifies integration with the BAS Mini Apps Platform in Laravel appli
 1.  **Require the package via Composer:**
 
     ```bash
-    composer require your-vendor/bas-laravel-sdk
+    composer require shikhbas/bas-laravel-sdk
     ```
 
     *(Replace `your-vendor/bas-laravel-sdk` with your actual package name)*
@@ -15,7 +15,7 @@ This SDK simplifies integration with the BAS Mini Apps Platform in Laravel appli
 2.  **Publish the configuration file (optional, but recommended):**
 
     ```bash
-    php artisan vendor:publish --provider="YourVendor\BasLaravelSdk\BasServiceProvider" --tag="bas-config"
+    php artisan vendor:publish --provider="ShikhBas\BasLaravelSdk\BasServiceProvider" --tag="bas-config"
     ```
 
     This command will copy the `config/bas.php` file to your application's `config` directory, allowing you to customize the configuration if needed (though environment variables are the primary way to configure the SDK).

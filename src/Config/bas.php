@@ -8,5 +8,7 @@ return [
     'auth_client_secret' => env('BAS_AUTH_CLIENT_SECRET', 'YOUR_BAS_AUTH_CLIENT_SECRET_HERE'),
     'environment' => env('BAS_ENVIRONMENT', 'staging'),
     'merchant_key' => env('BAS_MERCHANT_KEY', 'YOUR_BAS_MERCHANT_KEY_HERE'),
-    'iv' => env('BAS_IV', 'fixedIvString1234567890'), // **Keep the fixed IV as confirmed**
+    'app_id' => env('BAS_APP_ID', 'YOUR_BAS_APP_ID_HERE'),
+    'iv' => env('BAS_IV', '@@@@&&&&####$$$$'), // **Keep the fixed IV as confirmed**
+    'callback_uri' => env('BAS_CALLBACK_URI', 'YOUR_BAS_CALLBACK_URI_HERE')
 ];
